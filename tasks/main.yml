@@ -1,0 +1,46 @@
+---
+# Configure JKS trust store.
+
+# The trust store file is built from scratch every time, to make sure it
+# has the exact set of CA certificates configured. To avoid an unnecessary rebuild, once
+# you have a working setup, set "truststore_rebuild: false".
+
+- name: test if keytool command is available
+  command: keytool
+
+- block:
+  - name: remove existing trust store
+    file:
+      path: "{{ truststore_path }}"
+      state: absent
+  - name: remove existing certificate directory
+    file:
+      path: "{{ truststore_certs_path }}"
+      state: absent
+      recurse: yes
+
+  - name: create directory for certificates
+    file:
+      path: "{{ truststore_certs_path }}"
+      state: directory
+      owner: "{{ truststore_owner }}"
+      group: "{{ truststore_group }}"
+      mode: "{{ truststore_certs_mode }}"
+
+  - name: download certificates
+    sudo_user: "{{ truststore_owner }}"
+    get_url:
+      url: "{{ item.url }}"
+      dest: "{{ truststore_certs_path }}/{{ item.name }}"
+    with_items:
+      - "{{ truststore_certs }}"
+
+  - name: import certificates in a trust store file
+    sudo_user: "{{ truststore_owner }}"
+    command: keytool -importcert -noprompt -keystore {{ truststore_path }} -storepass {{ truststore_password }} -storetype JKS -providername SUN -file {{ item.name }} -alias {{ item.name }}
+    args:
+      chdir: "{{ truststore_certs_path }}"
+    with_items:
+      - "{{ truststore_certs }}"
+    notify: "{{ truststore_rebuild_handler }}"
+  when: truststore_rebuild
