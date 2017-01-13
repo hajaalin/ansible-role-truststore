@@ -36,11 +36,11 @@
       {{ truststore_cert_url_block }}
   register: cert_list
 
-- block:
-  - name: read list of certificate urls
-    shell: cat "{{ truststore_certs_list }}"
-    register: cat_cert_list
+- name: read list of certificate urls
+  shell: cat "{{ truststore_certs_list }}"
+  register: cat_cert_list
 
+- block:
   # - name: test certificate url list
   #   debug: msg={{ item }}
   #   with_items: "{{ cat_cert_list.stdout_lines }}"
@@ -51,7 +51,7 @@
       url: "{{ item }}"
       dest: "{{ truststore_certs_dir }}"
     with_items: "{{ cat_cert_list.stdout_lines }}"
-    when: "cert_list.changed and 'http' in item"
+    when: 'http' in item"
 
   # - name: test file glob
   #   sudo_user: "{{ truststore_owner }}"
