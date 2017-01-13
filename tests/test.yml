@@ -7,6 +7,10 @@
     - { url: 'https://www.digicert.com/CACerts/DigiCertAssuredIDRootCA.crt', name: 'DigiCertAssuredIDRootCA.crt'}
     - { url: 'http://www.terena.org/activities/tcs/repository/AddTrust_External_CA_Root.pem', name: 'AddTrust_External_CA_Root.pem' }
     - { url: 'http://www.terena.org/activities/tcs/repository/UTN-USERFirst-Hardware.pem', name: 'UTN-USERFirst-Hardware.pem' }
+  - truststore_cert_url_block: |
+      https://www.digicert.com/CACerts/DigiCertAssuredIDRootCA.crt
+      http://www.terena.org/activities/tcs/repository/AddTrust_External_CA_Root.pem
+      http://www.terena.org/activities/tcs/repository/UTN-USERFirst-Hardware.pem
 
   roles:
     - ansible-role-truststore

@@ -3,6 +3,7 @@
   truststore_name: "truststore.jks"
   truststore_path: "{{ truststore_dir }}/{{ truststore_name }}"
   truststore_certs_dir: "{{ truststore_dir }}/certs"
+  truststore_certs_list: "{{ truststore_certs_dir }}/certificate_urls.txt"
   truststore_password: "password"
 
   truststore_owner: "root"
