@@ -31,9 +31,15 @@
     with_items:
       - "{{ truststore_certs }}"
 
+  - name: test file glob
+    sudo_user: "{{ truststore_owner }}"
+    debug: msg={{ item }}
+    with_fileglob:
+      - "{{ truststore_certs_dir }}/*"
+
   - name: import certificates in a trust store file
     sudo_user: "{{ truststore_owner }}"
-    command: keytool -importcert -noprompt -keystore {{ truststore_path }} -storepass {{ truststore_password }} -storetype JKS -providername SUN -file {{ item.name }} -alias {{ item.name }}
+    command: keytool -importcert -noprompt -keystore {{ truststore_path }} -storepass {{ truststore_password }} -storetype JKS -providername SUN -file {{ item }} -alias {{ item }}
     with_fileglob:
       - "{{ truststore_certs_dir }}/*"
     notify: "{{ truststore_rebuild_handler }}"
