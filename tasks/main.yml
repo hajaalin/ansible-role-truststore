@@ -30,7 +30,6 @@
       owner: "{{ truststore_owner }}"
       group: "{{ truststore_group }}"
       mode: "{{ truststore_certs_mode }}"
-      marker: ""
       block: |
         {{ truststore_cert_url_block }}
 
@@ -48,6 +47,7 @@
       url: "{{ item }}"
       dest: "{{ truststore_certs_dir }}"
     with_items: "{{ cert_urls.stdout_lines }}"
+    when: "'http' in {{ item }}"
 
   - name: test file glob
     sudo_user: "{{ truststore_owner }}"
