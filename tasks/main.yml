@@ -55,6 +55,7 @@
     debug: msg={{ item }}
     with_fileglob:
       - "{{ truststore_certs_dir }}/*"
+    when: "item != truststore_certs_list"
 
   - name: import certificates in a trust store file
     sudo_user: "{{ truststore_owner }}"
