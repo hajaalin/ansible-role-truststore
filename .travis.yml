@@ -40,6 +40,17 @@ script:
     -e truststore_group=travis
     -e truststore_password=password
 
+  # idempotency: running the same play again should do nothing
+  - >
+    ansible-playbook tests/test.yml -i tests/inventory --connection=local
+    -e truststore_dir=$TRAVIS_BUILD_DIR/truststore
+    -e truststore_owner=travis
+    -e truststore_group=travis
+    -e truststore_password=password
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'rebuild flag test: pass' && exit 0)
+    || (echo 'rebuild flag test: fail' && exit 1)
+
   # there should be 3 certificates in the trust store now
   - >
     echo password | keytool -list -keystore $TRAVIS_BUILD_DIR/truststore/truststore.jks
@@ -47,16 +58,6 @@ script:
     && (echo 'three certs test: pass' && exit 0)
     || (echo 'three certs test: fail' && exit 1)
 
-  # this should do nothing
-  - >
-    ansible-playbook tests/test.yml -i tests/inventory --connection=local
-    -e truststore_dir=$TRAVIS_BUILD_DIR/truststore
-    -e truststore_owner=travis
-    -e truststore_group=travis
-    -e truststore_rebuild=false
-    | grep -q 'changed=0.*failed=0'
-    && (echo 'rebuild flag test: pass' && exit 0)
-    || (echo 'rebuild flag test: fail' && exit 1)
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

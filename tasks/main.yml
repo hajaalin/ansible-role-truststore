@@ -14,40 +14,43 @@
     file:
       path: "{{ truststore_certs_dir }}"
       state: absent
+  when: truststore_force_rebuild
 
-  - name: create directory for certificates
-    file:
-      path: "{{ truststore_certs_dir }}"
-      state: directory
-      owner: "{{ truststore_owner }}"
-      group: "{{ truststore_group }}"
-      mode: "{{ truststore_certs_mode }}"
+- name: create directory for certificates
+  file:
+    path: "{{ truststore_certs_dir }}"
+    state: directory
+    owner: "{{ truststore_owner }}"
+    group: "{{ truststore_group }}"
+    mode: "{{ truststore_certs_mode }}"
 
-  - name: create list of certificate urls
-    blockinfile:
-      create: yes
-      name: "{{ truststore_certs_list }}"
-      owner: "{{ truststore_owner }}"
-      group: "{{ truststore_group }}"
-      mode: "{{ truststore_certs_mode }}"
-      marker: "{mark}"
-      block: |
-        {{ truststore_cert_url_block }}
+- name: create list of certificate urls
+  blockinfile:
+    create: yes
+    name: "{{ truststore_certs_list }}"
+    owner: "{{ truststore_owner }}"
+    group: "{{ truststore_group }}"
+    mode: "{{ truststore_certs_mode }}"
+    marker: "{mark}"
+    block: |
+      {{ truststore_cert_url_block }}
+  register: cert_list
 
+- block:
   - name: read list of certificate urls
     shell: cat "{{ truststore_certs_list }}"
-    register: cert_urls
+    register: cat_cert_list
 
   - name: test certificate url list
     debug: msg={{ item }}
-    with_items: "{{ cert_urls.stdout_lines }}"
+    with_items: "{{ cat_cert_list.stdout_lines }}"
 
   - name: download certificates
     sudo_user: "{{ truststore_owner }}"
     get_url:
       url: "{{ item }}"
       dest: "{{ truststore_certs_dir }}"
-    with_items: "{{ cert_urls.stdout_lines }}"
+    with_items: "{{ cat_cert_list.stdout_lines }}"
     when: "'http' in item"
 
   - name: test file glob
@@ -63,4 +66,4 @@
       - "{{ truststore_certs_dir }}/*"
     when: "item != truststore_certs_list"
     notify: "{{ truststore_rebuild_handler }}"
-  when: truststore_rebuild
+  when: cert_list.changed

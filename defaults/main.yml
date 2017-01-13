@@ -15,7 +15,7 @@
   truststore_certs_mode: 0700
 
   # flag to indicate that trust store should be rebuilt
-  truststore_rebuild: true
+  truststore_force_rebuild: false
 
   # handler to run after rebuilding truststore
   truststore_rebuild_handler: "truststore_rebuild_handler_default"
