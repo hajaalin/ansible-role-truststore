@@ -17,7 +17,6 @@
     file:
       path: "{{ truststore_certs_path }}"
       state: absent
-      recurse: yes
 
   - name: create directory for certificates
     file:
