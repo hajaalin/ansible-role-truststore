@@ -33,10 +33,16 @@
       block: |
         {{ truststore_cert_url_block }}
 
+  - name: test with_lines
+    sudo_user: "{{ truststore_owner }}"
+    debug: msg={{ item }}
+    with_lines:
+      - "{{ truststore_certs_list }}"
+
   - name: download certificates
     sudo_user: "{{ truststore_owner }}"
     get_url:
-      url: "{{ item.url }}"
+      url: "{{ item }}"
       dest: "{{ truststore_certs_dir }}"
     with_lines:
       - "{{ truststore_certs_list }}"
