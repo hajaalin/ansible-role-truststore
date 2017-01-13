@@ -32,8 +32,16 @@ script:
     -e truststore_owner=travis
     -e truststore_group=travis
 
-  # install again, to see what happens
-  #- ansible-playbook tests/test.yml -i tests/inventory --connection=local -e truststore_dir=$TRAVIS_BUILD_DIR/truststore
+  # this should do nothing
+  - >
+    ansible-playbook tests/test.yml -i tests/inventory --connection=local
+    -e truststore_dir=$TRAVIS_BUILD_DIR/truststore
+    -e truststore_owner=travis
+    -e truststore_group=travis
+    -e truststore_rebuild=false
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'rebuild flag test: pass' && exit 0)
+    || (echo 'rebuild flag test: fail' && exit 1)
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
