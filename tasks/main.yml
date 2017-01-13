@@ -55,12 +55,12 @@
     debug: msg={{ item }}
     with_fileglob:
       - "{{ truststore_certs_dir }}/*"
-    when: "item != truststore_certs_list"
 
   - name: import certificates in a trust store file
     sudo_user: "{{ truststore_owner }}"
     command: keytool -importcert -noprompt -keystore {{ truststore_path }} -storepass {{ truststore_password }} -storetype JKS -providername SUN -file {{ item }} -alias {{ item }}
     with_fileglob:
       - "{{ truststore_certs_dir }}/*"
+    when: "item != truststore_certs_list"
     notify: "{{ truststore_rebuild_handler }}"
   when: truststore_rebuild
