@@ -15,12 +15,12 @@
       state: absent
   - name: remove existing certificate directory
     file:
-      path: "{{ truststore_certs_path }}"
+      path: "{{ truststore_certs_dir }}"
       state: absent
 
   - name: create directory for certificates
     file:
-      path: "{{ truststore_certs_path }}"
+      path: "{{ truststore_certs_dir }}"
       state: directory
       owner: "{{ truststore_owner }}"
       group: "{{ truststore_group }}"
@@ -30,7 +30,7 @@
     sudo_user: "{{ truststore_owner }}"
     get_url:
       url: "{{ item.url }}"
-      dest: "{{ truststore_certs_path }}/{{ item.name }}"
+      dest: "{{ truststore_certs_dir }}/{{ item.name }}"
     with_items:
       - "{{ truststore_certs }}"
 
@@ -38,7 +38,7 @@
     sudo_user: "{{ truststore_owner }}"
     command: keytool -importcert -noprompt -keystore {{ truststore_path }} -storepass {{ truststore_password }} -storetype JKS -providername SUN -file {{ item.name }} -alias {{ item.name }}
     args:
-      chdir: "{{ truststore_certs_path }}"
+      chdir: "{{ truststore_certs_dir }}"
     with_items:
       - "{{ truststore_certs }}"
     notify: "{{ truststore_rebuild_handler }}"

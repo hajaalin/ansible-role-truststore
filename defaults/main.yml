@@ -1,5 +1,8 @@
 ---
-  truststore_path: "/root/truststore.jks"
+  truststore_dir: "/root"
+  truststore_name:"truststore.jks"
+  truststore_path: "{{ truststore_dir }}/{{ truststore_name }}"
+  truststore_certs_dir: "{{ truststore_dir }}/certs"
   truststore_password: "password"
 
   truststore_owner: "root"
@@ -8,7 +11,6 @@
   # list of certificates to download
   truststore_certs: []
   # directory where to store the downloaded certificates
-  truststore_certs_path: "/root/truststore_certs"
   truststore_certs_mode: 0700
 
   # flag to indicate that trust store should be rebuilt
