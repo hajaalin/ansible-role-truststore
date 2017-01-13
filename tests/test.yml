@@ -1,5 +1,12 @@
 ---
 - hosts: localhost
   remote_user: root
+
+  vars:
+  - omero_trust_store_certificates:
+    - { url: 'https://www.digicert.com/CACerts/DigiCertAssuredIDRootCA.crt', name: 'DigiCertAssuredIDRootCA.crt'}
+    - { url: 'http://www.terena.org/activities/tcs/repository/AddTrust_External_CA_Root.pem', name: 'AddTrust_External_CA_Root.pem' }
+    - { url: 'http://www.terena.org/activities/tcs/repository/UTN-USERFirst-Hardware.pem', name: 'UTN-USERFirst-Hardware.pem' }
+
   roles:
     - ansible-role-truststore
