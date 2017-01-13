@@ -35,7 +35,7 @@ script:
 
   # there should be 3 certificates in the trust store now
   - >
-    echo password | keytool -keystore $TRAVIS_BUILD_DIR/truststore/truststore.jks
+    echo password | keytool -list -keystore $TRAVIS_BUILD_DIR/truststore/truststore.jks
     | grep -q "Your keystore contains 3 entries"
     && (echo 'three certs test: pass' && exit 0)
     || (echo 'three certs test: fail' && exit 1)
