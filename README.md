@@ -21,7 +21,7 @@ None.
 Example Playbook
 ----------------
 
-See `tests\test.yml`
+See `tests/test.yml`
 
 License
 -------
