@@ -41,9 +41,9 @@
     shell: cat "{{ truststore_certs_list }}"
     register: cat_cert_list
 
-  - name: test certificate url list
-    debug: msg={{ item }}
-    with_items: "{{ cat_cert_list.stdout_lines }}"
+  # - name: test certificate url list
+  #   debug: msg={{ item }}
+  #   with_items: "{{ cat_cert_list.stdout_lines }}"
 
   - name: download certificates
     sudo_user: "{{ truststore_owner }}"
@@ -53,11 +53,11 @@
     with_items: "{{ cat_cert_list.stdout_lines }}"
     when: "'http' in item"
 
-  - name: test file glob
-    sudo_user: "{{ truststore_owner }}"
-    debug: msg={{ item }}
-    with_fileglob:
-      - "{{ truststore_certs_dir }}/*"
+  # - name: test file glob
+  #   sudo_user: "{{ truststore_owner }}"
+  #   debug: msg={{ item }}
+  #   with_fileglob:
+  #     - "{{ truststore_certs_dir }}/*"
 
   - name: import certificates in a trust store file
     sudo_user: "{{ truststore_owner }}"
