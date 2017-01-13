@@ -40,6 +40,14 @@ script:
     -e truststore_group=travis
     -e truststore_password=password
 
+  # install role
+  - >
+    ansible-playbook tests/test.yml -i tests/inventory --connection=local
+    -e truststore_dir=$TRAVIS_BUILD_DIR/truststore
+    -e truststore_owner=travis
+    -e truststore_group=travis
+    -e truststore_password=password
+
   # idempotency: running the same play again should do nothing
   - >
     ansible-playbook tests/test.yml -i tests/inventory --connection=local
@@ -48,8 +56,8 @@ script:
     -e truststore_group=travis
     -e truststore_password=password
     | grep -q 'changed=0.*failed=0'
-    && (echo 'rebuild flag test: pass' && exit 0)
-    || (echo 'rebuild flag test: fail' && exit 1)
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
 
   # there should be 3 certificates in the trust store now
   - >
