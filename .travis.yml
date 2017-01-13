@@ -31,20 +31,14 @@ script:
     -e truststore_dir=$TRAVIS_BUILD_DIR/truststore
     -e truststore_owner=travis
     -e truststore_group=travis
+    -e truststore_password=password
 
   # there should be 3 certificates in the trust store now
   - >
-    echo {{ truststore_password }} | keytool -keystore {{ truststore_path }}
+    echo password | keytool -keystore $TRAVIS_BUILD_DIR/truststore/truststore.jks
     | grep -q "Your keystore contains 3 entries"
     && (echo 'three certs test: pass' && exit 0)
     || (echo 'three certs test: fail' && exit 1)
-
-  # check how this goes...
-  - >
-    echo {{ truststore_password }} | keytool -keystore {{ truststore_path }}
-    | grep -q "Your keystore contains 2 entries"
-    && (echo 'two certs test: pass' && exit 0)
-    || (echo 'two certs test: fail' && exit 1)
 
   # this should do nothing
   - >
