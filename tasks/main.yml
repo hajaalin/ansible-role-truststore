@@ -26,7 +26,7 @@
   - name: create list of certificate urls
     blockinfile:
       create: yes
-      path: "{{ truststore_certs_list }}"
+      name: "{{ truststore_certs_list }}"
       owner: "{{ truststore_owner }}"
       group: "{{ truststore_group }}"
       mode: "{{ truststore_certs_mode }}"
