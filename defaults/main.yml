@@ -1,6 +1,6 @@
 ---
   truststore_dir: "/root"
-  truststore_name:"truststore.jks"
+  truststore_name: "truststore.jks"
   truststore_path: "{{ truststore_dir }}/{{ truststore_name }}"
   truststore_certs_dir: "{{ truststore_dir }}/certs"
   truststore_password: "password"
