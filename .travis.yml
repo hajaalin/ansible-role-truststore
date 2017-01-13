@@ -5,6 +5,11 @@ python: "2.7"
 # Use the new container infrastructure
 sudo: false
 
+branches:
+  only:
+  - master
+  - test
+
 # Install ansible
 addons:
   apt:
