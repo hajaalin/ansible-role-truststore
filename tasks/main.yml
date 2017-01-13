@@ -5,9 +5,6 @@
 # has the exact set of CA certificates configured. To avoid an unnecessary rebuild, once
 # you have a working setup, set "truststore_rebuild: false".
 
-- name: test if keytool command is available
-  command: keytool
-
 - block:
   - name: remove existing trust store
     file:
