@@ -33,19 +33,20 @@
       block: |
         {{ truststore_cert_url_block }}
 
-  - name: test with_lines
-    sudo_user: "{{ truststore_owner }}"
+  - name: read list of certificate urls
+    shell: cat "{{ truststore_certs_list }}"
+    register: cert_urls
+
+  - name: test certificate url list
     debug: msg={{ item }}
-    with_lines:
-      - "{{ truststore_certs_list }}"
+    with_items: "{{ cert_urls.stdout_lines }}"
 
   - name: download certificates
     sudo_user: "{{ truststore_owner }}"
     get_url:
       url: "{{ item }}"
       dest: "{{ truststore_certs_dir }}"
-    with_lines:
-      - "{{ truststore_certs_list }}"
+    with_items: "{{ cert_urls.stdout_lines }}"
 
   - name: test file glob
     sudo_user: "{{ truststore_owner }}"
