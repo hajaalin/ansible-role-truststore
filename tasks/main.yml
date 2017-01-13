@@ -30,7 +30,7 @@
       owner: "{{ truststore_owner }}"
       group: "{{ truststore_group }}"
       mode: "{{ truststore_certs_mode }}"
-      marker: ""
+      marker: "{mark}"
       block: |
         {{ truststore_cert_url_block }}
 
