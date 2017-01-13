@@ -26,10 +26,14 @@ script:
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
 
   # install role
-  - ansible-playbook tests/test.yml -i tests/inventory --connection=local -e truststore_dir=$TRAVIS_BUILD_DIR/truststore
+  - >
+    ansible-playbook tests/test.yml -i tests/inventory --connection=local
+    -e truststore_dir=$TRAVIS_BUILD_DIR/truststore
+    -e truststore_owner=travis
+    -e truststore_group=travis
 
   # install again, to see what happens
-  - ansible-playbook tests/test.yml -i tests/inventory --connection=local -e truststore_dir=$TRAVIS_BUILD_DIR/truststore
+  #- ansible-playbook tests/test.yml -i tests/inventory --connection=local -e truststore_dir=$TRAVIS_BUILD_DIR/truststore
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
