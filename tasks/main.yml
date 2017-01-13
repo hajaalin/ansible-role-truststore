@@ -39,6 +39,7 @@
 - name: read list of certificate urls
   shell: cat "{{ truststore_certs_list }}"
   register: cat_cert_list
+  changed_when: False
 
 - block:
   # - name: test certificate url list
