@@ -1,6 +1,6 @@
 Role Name
 =========
-https://travis-ci.org/hajaalin/ansible-role-truststore.svg?branch=master
+[![Build Status](https://travis-ci.org/hajaalin/ansible-role-truststore.svg?branch=master)](https://travis-ci.org/hajaalin/ansible-role-truststore)
 
 A brief description of the role goes here.
 
