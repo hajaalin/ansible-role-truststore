@@ -48,7 +48,7 @@
       url: "{{ item }}"
       dest: "{{ truststore_certs_dir }}"
     with_items: "{{ cert_urls.stdout_lines }}"
-    when: "'http' in {{ item }}"
+    when: "'http' in item"
 
   - name: test file glob
     sudo_user: "{{ truststore_owner }}"
