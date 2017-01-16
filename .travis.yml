@@ -21,7 +21,7 @@ addons:
 install:
   # Install ansible
   - git clone git://github.com/ansible/ansible.git --recursive
-  - cd ./ansible; source ./hacking/env-setup
+  - cd ./ansible; source ./hacking/env-setup; cd ..
   #- pip install ansible
   - pip install paramiko PyYAML Jinja2 httplib2 six
 
