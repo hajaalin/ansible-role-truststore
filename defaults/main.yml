@@ -3,14 +3,16 @@
   truststore_name: "truststore.jks"
   truststore_path: "{{ truststore_dir }}/{{ truststore_name }}"
   truststore_certs_dir: "{{ truststore_dir }}/certs"
-  truststore_certs_list: "{{ truststore_certs_dir }}/certificate_urls.txt"
+  truststore_certs_list_name: "certificate_urls.txt"
+  truststore_certs_list_path: "{{ truststore_certs_dir }}/{{ truststore_certs_list_name }}"
   truststore_password: "password"
 
   truststore_owner: "root"
   truststore_group: "root"
+  truststore_mode: "0600"
 
   # list of certificates to download
-  truststore_certs: []
+  truststore_cert_url_block: ""
   # directory where to store the downloaded certificates
   truststore_certs_mode: 0700
 

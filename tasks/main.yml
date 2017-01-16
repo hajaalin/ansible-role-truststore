@@ -16,7 +16,14 @@
       state: absent
   when: truststore_force_rebuild
 
-- name: create directory for certificates
+- name: ensure truststore directory exists
+  file:
+    path: "{{ truststore_dir }}"
+    state: directory
+    owner: "{{ truststore_owner }}"
+    group: "{{ truststore_group }}"
+
+- name: ensure directory for certificates exists
   file:
     path: "{{ truststore_certs_dir }}"
     state: directory
@@ -27,17 +34,17 @@
 - name: create list of certificate urls
   blockinfile:
     create: yes
-    name: "{{ truststore_certs_list }}"
+    name: "{{ truststore_certs_list_path }}"
     owner: "{{ truststore_owner }}"
     group: "{{ truststore_group }}"
-    mode: "{{ truststore_certs_mode }}"
+    mode: "{{ truststore_mode }}"
     marker: "{mark}"
     block: |
       {{ truststore_cert_url_block }}
   register: cert_list
 
 - name: read list of certificate urls
-  shell: cat "{{ truststore_certs_list }}"
+  shell: cat "{{ truststore_certs_list_path }}"
   register: cat_cert_list
   changed_when: False
 
@@ -47,10 +54,11 @@
   #   with_items: "{{ cat_cert_list.stdout_lines }}"
 
   - name: download certificates
-    sudo_user: "{{ truststore_owner }}"
     get_url:
       url: "{{ item }}"
       dest: "{{ truststore_certs_dir }}"
+      owner: "{{ truststore_owner }}"
+      group: "{{ truststore_group }}"
     with_items: "{{ cat_cert_list.stdout_lines }}"
     when: "'http' in item"
 
@@ -60,11 +68,26 @@
   #   with_fileglob:
   #     - "{{ truststore_certs_dir }}/*"
 
+  - name: create list of cert files (workaround for bug in "with_fileglob" on CentOS7)
+    shell: ls "{{ truststore_certs_dir }}"
+    register: ls_certs_dir
+    changed_when: False
+
   - name: import certificates in a trust store file
-    sudo_user: "{{ truststore_owner }}"
     command: keytool -importcert -noprompt -keystore {{ truststore_path }} -storepass {{ truststore_password }} -storetype JKS -providername SUN -file {{ item }} -alias {{ item }}
-    with_fileglob:
-      - "{{ truststore_certs_dir }}/*"
-    when: "item != truststore_certs_list"
+    # with_fileglob:
+    #   - "{{ truststore_certs_dir }}/*"
+    args:
+      chdir: "{{ truststore_certs_dir }}"
+    when: "item != truststore_certs_list_name"
+    with_items: "{{ ls_certs_dir.stdout_lines }}"
     notify: "{{ truststore_rebuild_handler }}"
+
+  - name: set owner and permissions on the truststore
+    file:
+      path: "{{ truststore_path }}"
+      owner: "{{ truststore_owner }}"
+      group: "{{ truststore_group }}"
+      mode: "{{ truststore_mode }}"
+
   when: cert_list.changed
