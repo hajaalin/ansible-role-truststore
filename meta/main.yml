@@ -4,7 +4,7 @@ galaxy_info:
 
   license: license (BSD)
 
-  min_ansible_version: 2.0
+  min_ansible_version: 2.3.0
 
   #
   # Below are all platforms currently available. Just uncomment the ones that apply
@@ -136,12 +136,9 @@ galaxy_info:
   #  versions:
   #  - all
   #  - any
-  #- name: EL
-  #  versions:
-  #  - all
-  #  - 5
-  #  - 6
-  #  - 7
+  - name: EL
+    versions:
+    - 7
   #- name: Windows
   #  versions:
   #  - all
