@@ -21,7 +21,13 @@ None.
 Example Playbook
 ----------------
 
-See `tests/test.yml`
+See `tests/test.yml`.
+
+Another example with OMERO can be found here:
+https://github.com/hajaalin/omero-deploy-example
+https://github.com/hajaalin/omero-deploy-example/blob/master/inventory/group_vars/all/main.yml
+
+
 
 License
 -------
